@@ -3,6 +3,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 ARTISTLIST = []
 X = 1
@@ -18,7 +19,7 @@ def souploop(artist):
         """This is the specific/secondary web scraping loop
         I decided to leave the for loop so that the range can be easily changen to 10
         and the url to url="https://www.metrolyrics.com/%s-alpage-%s.html" % (artist, n)"""
-        
+
         url = "https://www.metrolyrics.com/%s-lyrics.html" % (artist)
         r = requests.get(url)
         SOUP = [a["href"] for a in BeautifulSoup(r.content,
@@ -31,8 +32,9 @@ def souploop(artist):
     return str(LYRICSLIST)
 
 
-def lyricsmodification(lyrics, artist):
+def lyricsmodification(lyrics, artist, artistlist):
     """This is the lyrics cleaning loop"""
+    ARTISTLIST = artistlist
     lyrics = re.sub(r"<..>", ' ', lyrics)
     lyrics = re.sub(r"<...>", ' ', lyrics)
     lyrics = re.sub(r"<.*>", ' ', lyrics)
@@ -45,16 +47,18 @@ def lyricsmodification(lyrics, artist):
     lyrics = re.sub(r"\s'", " ", lyrics)
     lyrics = re.sub(r"'\s", " ", lyrics)
     lyrics = lyrics + "finaldummy"
-    lyrics = lyrics.replace("\n artistdummy, factorizingdummy, finaldummy","")
-    lyrics = re.sub(r"finaldummy", ' \n ', lyrics)
+    lyrics = re.sub(r"finaldummy", '', lyrics)
     lyrics = re.sub(r"artistdummy", artist, lyrics)
     lyrics = re.sub(r"factorizingdummy", str(ARTISTLIST.index(artist)), lyrics)
 
-    print(lyrics, file=open("%s.csv" % (artist), 'w'))        
+    print(lyrics, file=open("%s.csv" % (artist), 'w'))
     print(lyrics, file=open("output.csv", 'a'))
     print('csv file has been created with Lyrics from: ' + artist)
 
-    return len(lyrics)
+    final_file_size = int(Path("output.csv").stat().st_size)
+    print(final_file_size)
+
+    return final_file_size, artistlist
 
 if __name__ == '__main__':
 
@@ -75,6 +79,8 @@ if __name__ == '__main__':
             break
         ARTISTLIST.append(ARTIST)
 
+
+
     print('the list of artists you made is:')
     print('')
     print(ARTISTLIST)
@@ -83,7 +89,7 @@ if __name__ == '__main__':
     print('')
 
     for artist in ARTISTLIST:
-        lyricsmodification(souploop(artist), artist)
+        lyricsmodification(souploop(artist), artist, ARTISTLIST)
 
     print('')
     print("all lyrics have been merged to output.csv")
