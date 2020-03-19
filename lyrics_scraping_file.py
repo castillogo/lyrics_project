@@ -3,6 +3,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 ARTISTLIST = []
 X = 1
@@ -31,8 +32,9 @@ def souploop(artist):
     return str(LYRICSLIST)
 
 
-def lyricsmodification(lyrics, artist):
+def lyricsmodification(lyrics, artist, artistlist):
     """This is the lyrics cleaning loop"""
+    ARTISTLIST = artistlist
     lyrics = re.sub(r"<..>", ' ', lyrics)
     lyrics = re.sub(r"<...>", ' ', lyrics)
     lyrics = re.sub(r"<.*>", ' ', lyrics)
@@ -53,7 +55,10 @@ def lyricsmodification(lyrics, artist):
     print(lyrics, file=open("output.csv", 'a'))
     print('csv file has been created with Lyrics from: ' + artist)
 
-    return len(lyrics)
+    final_file_size = int(Path("output.csv").stat().st_size)
+    print(final_file_size)
+
+    return final_file_size, artistlist
 
 if __name__ == '__main__':
 
@@ -74,6 +79,8 @@ if __name__ == '__main__':
             break
         ARTISTLIST.append(ARTIST)
 
+
+
     print('the list of artists you made is:')
     print('')
     print(ARTISTLIST)
@@ -82,7 +89,7 @@ if __name__ == '__main__':
     print('')
 
     for artist in ARTISTLIST:
-        lyricsmodification(souploop(artist), artist)
+        lyricsmodification(souploop(artist), artist, ARTISTLIST)
 
     print('')
     print("all lyrics have been merged to output.csv")

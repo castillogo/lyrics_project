@@ -6,7 +6,7 @@ Created on Mon Mar 16 15:59:40 2020
 """
 
 import pytest
-from lyrics_scraping_file2 import souploop, lyricsmodification
+from lyrics_scraping_file import souploop, lyricsmodification
 
 def test_artist():
     ARTISTLIST = ['Aerosmith']
