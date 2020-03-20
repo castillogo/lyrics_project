@@ -28,28 +28,28 @@ LYRICS_DF = pd.read_csv('output.csv')
 LYRICS_DF['singer_number'] = LYRICS_DF['singer_number'].astype(int)
 LYRICSWORDS = LYRICS_DF['lyrics_words'].to_list()
 
-def print_evaluations(Y_TRAIN, Y_PRED, model):
+def print_evaluations(y_train, y_pred, model):
 
     """
     This function summaries all scores and
     makes a confusion matrix heatman
     """
     print(f'How does model {model} score:')
-    print(f"The accuracy of the model is: {round(accuracy_score(Y_TRAIN, Y_PRED), 3)}")
-    print(f"The precision of the model is: {round(precision_score(Y_TRAIN, Y_PRED, average='weighted'), 3)}")
-    print(f"The recall of the model is: {round(recall_score(Y_TRAIN, Y_PRED, average='weighted'), 3)}")
-    print(f"The f1-score of the model is: {round(f1_score(Y_TRAIN, Y_PRED, average='weighted'), 3)}")
+    print(f"The accuracy of the model is: {round(accuracy_score(y_train, y_pred), 3)}")
+    print(f"The precision of the model is: {round(precision_score(y_train, y_pred, average='weighted'), 3)}")
+    print(f"The recall of the model is: {round(recall_score(y_train, y_pred, average='weighted'), 3)}")
+    print(f"The f1-score of the model is: {round(f1_score(y_train, y_pred, average='weighted'), 3)}")
 
     #print confusion matrix
     plt.figure(figsize=(15, 15))
-    Cm = confusion_matrix(Y_TRAIN, Y_PRED)
+    Cm = confusion_matrix(y_train, y_pred)
     print(Cm)
     Ax = plt.subplot()
     sns.heatmap(Cm, annot=True, ax=Ax)
     Ax.set_xlabel('Predicted labels')
     Ax.set_ylabel('True labels')
     Ax.set_title('Confusion Matrix %s' % (model))
-    return accuracy_score(Y_TRAIN, Y_PRED, model)
+    return accuracy_score(y_train, y_pred, model)
 
 if __name__ == '__main__':
 
