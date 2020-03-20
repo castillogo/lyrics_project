@@ -22,8 +22,7 @@ def souploop(artist):
 
         url = "https://www.metrolyrics.com/%s-lyrics.html" % (artist)
         r = requests.get(url)
-        SOUP = [a["href"] for a in BeautifulSoup(r.content,
-                                                 features="lxml").find_all("a", "title", href=True)]
+        SOUP = [a["href"] for a in BeautifulSoup(r.content).find_all("a", "title", href=True)]
         VERSES = [BeautifulSoup(requests.get(url).content,
                                 features="lxml").find_all("p", "verse") for url in SOUP]
         for i, verse in enumerate(VERSES):
