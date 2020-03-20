@@ -1,7 +1,6 @@
 pandas
 seaborn
 pytest
-re
 warnings
 numpy
 matplotlib
