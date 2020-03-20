@@ -10,7 +10,7 @@ python:
 
 # Command to install dependencies
 install:
-  - pip install -r requirements.txt --use-mirrors
+  - pip install -r requirements.txt
   - pip install pylint
 
 # Command to run tests
