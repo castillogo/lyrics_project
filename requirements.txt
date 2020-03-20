@@ -1,1 +1,10 @@
 pandas
+seaborn
+pytest
+re
+warnings
+numpy
+matplotlib
+requests
+bs4
+pathlib
